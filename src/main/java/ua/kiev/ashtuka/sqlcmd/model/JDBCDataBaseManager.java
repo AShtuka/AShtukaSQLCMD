@@ -163,4 +163,9 @@ public class JDBCDataBaseManager implements DataBaseManager {
         statement.executeUpdate(query);
         statement.close();
     }
+
+    @Override
+    public boolean isConnected() {
+        return connection != null;
+    }
 }

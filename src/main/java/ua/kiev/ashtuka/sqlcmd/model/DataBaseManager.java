@@ -27,4 +27,6 @@ public interface DataBaseManager {
     void update(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
 
     void delete(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
+
+    boolean isConnected();
 }
