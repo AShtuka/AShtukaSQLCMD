@@ -14,15 +14,30 @@ public class MainController {
         this.dataBaseManager = dataBaseManager;
         this.commands = new Command[]{
                 new Connect(dataBaseManager, view),
-                new Exit(view),
                 new Help(view),
+                new Exit(view),
                 new IsConnected(dataBaseManager, view),
                 new Tables(dataBaseManager, view),
                 new Find(dataBaseManager, view),
+                new Clear(dataBaseManager, view),
+                new Drop(dataBaseManager, view),
+                new Create(dataBaseManager, view),
+                new Insert(dataBaseManager, view),
+                new Update(dataBaseManager, view),
+                new Delete(dataBaseManager, view),
                 new Unsupported(view)};
     }
 
     public void run(){
+        try {
+            doWork();
+        } catch (ExitException e){
+            // do nothing
+        }
+        return;
+    }
+
+    private void doWork() {
         view.write("Hi user!");
         view.write("Enter please name of model, user's name and password in format: connect|model|userName|password");
         while (true) {

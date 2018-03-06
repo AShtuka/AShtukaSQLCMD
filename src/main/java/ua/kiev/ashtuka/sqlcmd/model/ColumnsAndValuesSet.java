@@ -1,8 +1,9 @@
 package ua.kiev.ashtuka.sqlcmd.model;
 
+import java.util.ArrayList;
+
 public class ColumnsAndValuesSet {
-    private ColumnValue[] columnValues = new ColumnValue[10];
-    private int index = 0;
+    private ArrayList<ColumnValue> columnValues = new ArrayList<>();
 
     static class ColumnValue{
         private String columnName;
@@ -15,28 +16,21 @@ public class ColumnsAndValuesSet {
             this.value = value;
         }
 
-        ColumnValue(String columnName, Object oldValue, Object newValue){
-            this.columnName = columnName;
-            this.value = oldValue;
-            this.newValue = newValue;
-        }
     }
 
     public void put(String columnName, Object value){
-        columnValues[index++] = new ColumnValue(columnName, value);
+        columnValues.add(new ColumnValue(columnName, value));
     }
 
-    public void put(String columnName, Object oldValue, Object newValue){
-        columnValues[index++] = new ColumnValue(columnName, oldValue, newValue);
-    }
 
     public String getColumnName(){
         String str = "";
-        for (int i = 0; i < index; i++) {
-            if (index == 0) {
-                return null;
-            }
-            str = str + columnValues[i].columnName + ", ";
+        for (int i = 0; i < columnValues.size(); i++) {
+
+            str = str + columnValues.get(i).columnName + ", ";
+        }
+        if (columnValues.size() == 0) {
+            return null;
         }
         str = str.substring(0, str.length() - 2);
         return str;
@@ -44,29 +38,34 @@ public class ColumnsAndValuesSet {
 
     public String getColumnValues(){
         String str = "";
-        for (int i = 0; i < index; i++) {
-            if (index == 0) {
-                return null;
-            }
-            str = str + "\"" + columnValues[i].value.toString() + "\"" + ", ";
+        for (int i = 0; i < columnValues.size(); i++) {
+            str = str + "\"" + columnValues.get(i).value.toString() + "\"" + ", ";
+        }
+        if (columnValues.size() == 0) {
+            return null;
         }
         str = str.substring(0, str.length() - 2);
         return str;
     }
 
-    public String getColumnNewValues(){
+    public String getColumnNameColumnValue(){
         String str = "";
-        for (int i = 0; i < index; i++) {
-            if (index == 0) {
-                return null;
-            }
-            str = str + "\"" + columnValues[i].newValue.toString() + "\"" + ", ";
+        for (int i = 0; i < columnValues.size(); i++) {
+
+            str = str + columnValues.get(i).columnName + " = " + "\"" + columnValues.get(i).value + "\"" + ", ";
+        }
+        if (columnValues.size() == 0) {
+            return null;
         }
         str = str.substring(0, str.length() - 2);
         return str;
     }
 
-    public void clearColumnAndValueSet(){
-        index = 0;
+    public void clear(){
+        columnValues.clear();
+    }
+
+    public int size(){
+        return columnValues.size();
     }
 }

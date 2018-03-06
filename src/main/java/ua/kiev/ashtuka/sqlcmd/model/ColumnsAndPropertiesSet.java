@@ -1,9 +1,10 @@
 package ua.kiev.ashtuka.sqlcmd.model;
 
+import java.util.ArrayList;
+
 public class ColumnsAndPropertiesSet {
 
-    private ColumnProperties[] columnProperties = new ColumnProperties[10];
-    private int index = 0;
+    private ArrayList<ColumnProperties> columnsAndPropertiesSets = new ArrayList<>();
 
     static class ColumnProperties{
         private String columnName;
@@ -21,40 +22,43 @@ public class ColumnsAndPropertiesSet {
             this.columnType = columnType;
         }
 
-        public String getColumnName() {
-            return columnName;
-        }
 
         public int getVarcharSize() {
             return VarcharSize;
         }
 
-        public ColumnType getColumnType() {
-            return columnType;
-        }
     }
 
     public void put(String columnName, ColumnType columnType, int VarcharSize){
-        columnProperties[index++] = new ColumnProperties(columnName, columnType, VarcharSize);
+        columnsAndPropertiesSets.add(new ColumnProperties(columnName, columnType, VarcharSize));
     }
 
     public void put(String columnName, ColumnType columnType){
-        columnProperties[index++] = new ColumnProperties(columnName, columnType);
+        columnsAndPropertiesSets.add(new ColumnProperties(columnName, columnType));
     }
 
     public String getColumnNamePlusColumnType(){
         String str = "";
-        for (int i = 0; i < index; i++){
-            if (index == 0){
-                return null;
-            }
-            if (columnProperties[i].getVarcharSize() == 0){
-                str = str + columnProperties[i].columnName + " " + columnProperties[i].columnType + ", ";
+        for (int i = 0; i < columnsAndPropertiesSets.size(); i++){
+            if (columnsAndPropertiesSets.get(i).getVarcharSize() == 0){
+                str = str + columnsAndPropertiesSets.get(i).columnName + " " + columnsAndPropertiesSets.get(i).columnType + ", ";
             } else {
-                str = str + columnProperties[i].columnName + " " + columnProperties[i].columnType + "(" + columnProperties[i].VarcharSize + ")" + ", ";
+                str = str + columnsAndPropertiesSets.get(i).columnName + " " + columnsAndPropertiesSets.get(i).columnType + "(" + columnsAndPropertiesSets.get(i).VarcharSize + ")" + ", ";
             }
+        }
+        if (str.equals("")){
+            return null;
         }
         str = str.substring(0, str.length() - 2);
         return str;
+    }
+
+    public void clear(){
+        columnsAndPropertiesSets.clear();
+    }
+
+
+    public int size(){
+        return columnsAndPropertiesSets.size();
     }
 }

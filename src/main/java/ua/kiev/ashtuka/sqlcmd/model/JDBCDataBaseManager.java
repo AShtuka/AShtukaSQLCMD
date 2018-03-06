@@ -147,13 +147,13 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public void update(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException {
-        String query = "UPDATE " + tableName +" SET " + columnsAndValuesSet.getColumnName() + " = ? WHERE " + columnsAndValuesSet.getColumnName() + " = ?";
-        PreparedStatement preparedStatementstatement = connection.prepareStatement(query);
-        preparedStatementstatement.setString( 1, columnsAndValuesSet.getColumnNewValues().substring(1,columnsAndValuesSet.getColumnNewValues().length() - 1));
-        preparedStatementstatement.setString(2, columnsAndValuesSet.getColumnValues().substring(1,columnsAndValuesSet.getColumnValues().length() - 1));
-        preparedStatementstatement.executeUpdate();
-        preparedStatementstatement.close();
+    public void update(String tableName, ColumnsAndValuesSet checkedColumnsAndValuesSet, ColumnsAndValuesSet updatedColumnAndValueSet) throws SQLException {
+        String nameAndValueForUpdate = updatedColumnAndValueSet.getColumnNameColumnValue();
+        String query = "UPDATE " + tableName +" SET " + nameAndValueForUpdate + " WHERE "
+                + checkedColumnsAndValuesSet.getColumnName() + " = " + checkedColumnsAndValuesSet.getColumnValues();
+        statement = connection.createStatement();
+        statement.executeUpdate(query);
+        statement.close();
     }
 
     @Override

@@ -5,23 +5,27 @@ import ua.kiev.ashtuka.sqlcmd.view.View;
 
 import java.sql.SQLException;
 
-public class Tables implements Command {
+public class Clear implements Command {
+
     private View view;
     private DataBaseManager dataBaseManager;
 
-    public Tables(DataBaseManager dataBaseManager, View view){
+    public Clear(DataBaseManager dataBaseManager, View view){
         this.dataBaseManager = dataBaseManager;
         this.view = view;
     }
     @Override
     public boolean canProcess(String command) {
-        return command.equals("tables");
+        return command.startsWith("clear|");
     }
 
     @Override
     public void process(String command) {
+        String[] arr = command.split("[|]");
+        String tableName = arr[1];
         try {
-            dataBaseManager.tables();
+            dataBaseManager.clear(tableName);
+            view.write(String.format("From table '%s' all data deleted", tableName));
         } catch (SQLException e) {
             view.printError(e);
         }

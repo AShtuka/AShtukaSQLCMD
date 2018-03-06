@@ -24,7 +24,7 @@ public interface DataBaseManager {
 
     void insert(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
 
-    void update(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
+    void update(String tableName, ColumnsAndValuesSet checkedColumnsAndValuesSet, ColumnsAndValuesSet updatedColumnAndValueSet) throws SQLException;
 
     void delete(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
 

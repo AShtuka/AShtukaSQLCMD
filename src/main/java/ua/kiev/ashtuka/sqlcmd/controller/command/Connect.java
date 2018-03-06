@@ -22,7 +22,8 @@ public class Connect implements Command {
                 try {
                     String[] data = command.split("[|]");
                     if (data.length != count()){
-                        throw new IllegalArgumentException(String.format("Wrong number of parameters separated by a sign '|' , expected '%s', but we have '%s'", data.length, count()));
+                        throw new IllegalArgumentException(String.format("Wrong number of parameters separated by a sign '|' ," +
+                                " expected '%s', but we have '%s'", count(), data.length));
                     }
                     String dataBaseName = data[1];
                     String userName = data[2];
@@ -31,20 +32,11 @@ public class Connect implements Command {
                     dataBaseManager.getConnection(dataBaseName, userName, password);
                     view.write("Connection successful!");
                 } catch (Exception e){
-                    printError(e);
+                    view.printError(e);
                 }
     }
 
     private int count() {
         return COMMAND_SAMPLE.split("[|]").length;
-    }
-
-    private void printError(Exception e) {
-        String message = e.getMessage();
-        if (e.getCause() != null){
-            message = message + " " + e.getCause().getMessage();
-        }
-        view.write("Fail for a reason: " + message);
-        view.write("Please try again!");
     }
 }

@@ -1,6 +1,6 @@
 package ua.kiev.ashtuka.sqlcmd.model;
 
-enum  ColumnType {
+public enum  ColumnType {
     VARCHAR, INT;
 
 
