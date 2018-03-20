@@ -24,20 +24,13 @@ public class Console implements View {
     }
 
     @Override
-    public void printTable(DataBaseManager dataBaseManager, String command) {
-        String[] arr = command.split("[|]");
-        String tableName = arr[1];
-        try {
-            ArrayList<String> list = dataBaseManager.find(tableName);
-            String str = list.get(0);
-            list.remove(0);
-            String[] obgArg = obgArg(str);
-            String format = format(str);
-            String[] horizontalLineObjArg = horizontalLine(str);
-            tablePrint(list, obgArg, format, horizontalLineObjArg);
-        } catch (SQLException e) {
-            printError(e);
-        }
+    public void printTable(ArrayList<String> list) {
+        String str = list.get(0);
+        list.remove(0);
+        String[] obgArg = obgArg(str);
+        String format = format(str);
+        String[] horizontalLineObjArg = horizontalLine(str);
+        tablePrint(list, obgArg, format, horizontalLineObjArg);
     }
 
     @Override
@@ -57,7 +50,7 @@ public class Console implements View {
 
             st = st + "-20s%-2s%";
         }
-        return st = "%-2s%" + st + "n";
+        return "%-2s%" + st + "n";
     }
 
     private String[] obgArg(String str) {
@@ -98,7 +91,6 @@ public class Console implements View {
         formatWrite(format, horizontalLineObjArg);
         for (int i = 0; i < list.size(); i ++){
             String row = list.get(i);
-            String[] string = row.split(" ");
             String[] obgArgForRow = obgArg(row);
             formatWrite(format, obgArgForRow);
         }

@@ -32,8 +32,9 @@ public class Delete implements Command {
             try {
                 dataBaseManager.delete(tableName, columnsAndValuesSet);
                 columnsAndValuesSet.clear();
-                view.printTable(dataBaseManager, command);
+                view.printTable(dataBaseManager.find(tableName));
             } catch (SQLException e) {
+                columnsAndValuesSet.clear();
                 view.printError(e);
             }
         }

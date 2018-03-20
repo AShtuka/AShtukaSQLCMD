@@ -30,8 +30,9 @@ public class Insert implements Command {
             try {
                 dataBaseManager.insert(tableName, columnsAndValuesSet);
                 columnsAndValuesSet.clear();
-                view.printTable(dataBaseManager, command);
+                view.printTable(dataBaseManager.find(tableName));
             } catch (SQLException e) {
+                columnsAndValuesSet.clear();
                 view.printError(e);
             }
         }

@@ -42,7 +42,9 @@ public class Create implements Command {
                 columnsAndPropertiesSet.clear();
                 view.write(String.format("Table  - '%s' created", tableName));
             } catch (SQLException e) {
+                columnsAndPropertiesSet.clear();
                 view.printError(e);
+                return;
             }
         }
     }

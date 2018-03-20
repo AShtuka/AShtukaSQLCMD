@@ -4,6 +4,7 @@ import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 public class Tables implements Command {
     private View view;
@@ -21,7 +22,10 @@ public class Tables implements Command {
     @Override
     public void process(String command) {
         try {
-            dataBaseManager.tables();
+            ArrayList<String> list = dataBaseManager.tables();
+            for (int i = 0; i < list.size(); i++){
+                view.write(list.get(i));
+            }
         } catch (SQLException e) {
             view.printError(e);
         }

@@ -8,7 +8,6 @@ public class ColumnsAndValuesSet {
     static class ColumnValue{
         private String columnName;
         private Object value;
-        private Object newValue;
 
 
         ColumnValue(String columnName, Object value){

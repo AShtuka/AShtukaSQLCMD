@@ -8,11 +8,11 @@ public interface DataBaseManager {
 
     Connection getConnection(String dataBaseName, String USERNAME, String PASSWORD);
 
-    void tables() throws SQLException;
+    ArrayList<String> tables() throws SQLException;
 
-    void databases() throws SQLException;
+    ArrayList<String> databases() throws SQLException;
 
-    void tables(String dataBase_Name) throws SQLException;
+    ArrayList<String> tables(String dataBase_Name) throws SQLException;
 
     void clear(String tableName) throws SQLException;
 
@@ -20,13 +20,13 @@ public interface DataBaseManager {
 
     ArrayList<String> find(String tableName) throws SQLException;
 
-    void create(String tableName, ColumnsAndPropertiesSet columnsAndPropertiesSet) throws SQLException;
+    int create(String tableName, ColumnsAndPropertiesSet columnsAndPropertiesSet) throws SQLException;
 
-    void insert(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
+    int insert(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
 
-    void update(String tableName, ColumnsAndValuesSet checkedColumnsAndValuesSet, ColumnsAndValuesSet updatedColumnAndValueSet) throws SQLException;
+    int update(String tableName, ColumnsAndValuesSet checkedColumnsAndValuesSet, ColumnsAndValuesSet updatedColumnAndValueSet) throws SQLException;
 
-    void delete(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
+    int delete(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
 
     boolean isConnected();
 }

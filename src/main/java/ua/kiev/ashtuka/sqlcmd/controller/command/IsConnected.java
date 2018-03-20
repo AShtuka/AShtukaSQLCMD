@@ -4,6 +4,7 @@ import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
 public class IsConnected implements Command {
+
     private DataBaseManager dataBaseManager;
     private View view;
 

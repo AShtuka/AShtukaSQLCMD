@@ -44,7 +44,7 @@ public class Update implements Command {
                 dataBaseManager.update(tableName, checked, update);
                 checked.clear();
                 update.clear();
-                view.printTable(dataBaseManager, command);
+                view.printTable(dataBaseManager.find(tableName));
             } catch (SQLException e) {
                 checked.clear();
                 update.clear();

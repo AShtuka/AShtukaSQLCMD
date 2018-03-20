@@ -23,7 +23,13 @@ public class Find implements Command {
 
     @Override
     public void process(String command) {
-        view.printTable(dataBaseManager, command);
+        String[] arr = command.split("[|]");
+        String tableName = arr[1];
+        try {
+            view.printTable(dataBaseManager.find(tableName));
+        } catch (SQLException e) {
+            view.printError(e);
+        }
     }
 
 }
