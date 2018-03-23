@@ -23,9 +23,9 @@ public class Insert implements Command {
 
     @Override
     public void process(String command) {
-        String[] arr = command.split("[|]");
-        String tableName = arr[1];
-        columnsAndValuesSet = getColumnAndValueSet(arr, command);
+        String[] parameters = command.split("[|]");
+        String tableName = parameters[1];
+        columnsAndValuesSet = getColumnAndValueSet(parameters, command);
         if (columnsAndValuesSet.size() != 0) {
             try {
                 dataBaseManager.insert(tableName, columnsAndValuesSet);
@@ -38,14 +38,15 @@ public class Insert implements Command {
         }
     }
 
-    private ColumnsAndValuesSet getColumnAndValueSet(String[] arr, String command) {
+    private ColumnsAndValuesSet getColumnAndValueSet(String[] parameters, String command) {
         try {
-            if (arr.length % 2 != 0 || arr.length == 2) {
+            if (parameters.length % 2 != 0 || parameters.length == 2) {
                 throw new WrongCommandFormat(String.format("Invalid command format. Expected " +
-                        "insert|tableName|column1Name|Value1|column2Name|Value2|....|column_N_Name|Value_N and you have entered: %s", command));
+                        "insert|tableName|column1Name|Value1|column2Name|Value2|...." +
+                        "|column_N_Name|Value_N and you have entered: %s", command));
             }
-            for (int i = 2, y = 3; i <= arr.length - 2; i += 2, y += 2) {
-                columnsAndValuesSet.put(arr[i], arr[y]);
+            for (int name = 2, value = 3; name <= parameters.length - 2; name += 2, value += 2) {
+                columnsAndValuesSet.put(parameters[name], parameters[value]);
             }
         } catch (WrongCommandFormat e){
             columnsAndValuesSet.clear();

@@ -4,9 +4,9 @@ import com.mysql.fabric.jdbc.FabricMySQLDriver;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class JDBCDataBaseManager implements DataBaseManager {
-
     public static final String SEPARATOR_SPACE = " ";
     private Connection connection;
 
@@ -14,6 +14,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             Driver driver = new FabricMySQLDriver();
             DriverManager.registerDriver(driver);
     }
+
     @Override
     public Connection getConnection(String URL, String dataBaseName, String USERNAME, String PASSWORD)  {
         if (connection != null){
@@ -29,40 +30,40 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public ArrayList<String> tables() throws SQLException {
-        ArrayList<String> list = new ArrayList<>();
+    public List<String> tables() throws SQLException {
+        List<String> tablesList = new ArrayList<>();
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         try(ResultSet rs = databaseMetaData.getTables(null, null, "%",null)) {
             while (rs.next()) {
-                list.add("Table_name = " + rs.getString(3));
+                tablesList.add("Table_name = " + rs.getString(3));
             }
         }
-        return list;
+        return tablesList;
     }
 
     @Override
-    public ArrayList<String> databases() throws SQLException {
-        ArrayList<String> list = new ArrayList<>();
+    public List<String> databases() throws SQLException {
+        List<String> dbList = new ArrayList<>();
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         try(ResultSet rs = databaseMetaData.getCatalogs()) {
             while (rs.next()) {
-                list.add("DataBases_Name = " + rs.getString("TABLE_CAT"));
+                dbList.add("DataBases_Name = " + rs.getString("TABLE_CAT"));
             }
         }
-        return list;
+        return dbList;
     }
 
     @Override
-    public ArrayList<String> tables(String dataBase_Name) throws SQLException {
-        ArrayList<String> list = new ArrayList<>();
+    public List<String> tables(String dataBase_Name) throws SQLException {
+        List<String> tablesList = new ArrayList<>();
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         String[] types = {"TABLE"};
         try(ResultSet rs = databaseMetaData.getTables(dataBase_Name, null, "%",types)) {
             while (rs.next()) {
-                list.add("Table_name = " + rs.getString("TABLE_NAME"));
+                tablesList.add("Table_name = " + rs.getString("TABLE_NAME"));
             }
         }
-        return list;
+        return tablesList;
     }
 
     @Override
@@ -82,43 +83,44 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public ArrayList<String> find(String tableName) throws SQLException {
-        ArrayList<String> list = new ArrayList<>();
+    public List<String> find(String tableName) throws SQLException {
+        List<String> resultList = new ArrayList<>();
         try(Statement st = connection.createStatement(); ResultSet rs = st.executeQuery("SELECT * FROM " + tableName)) {
-            String str = ColumnNameAndColumnType(tableName);
-            list.add(str);
-            String[] columnNameAndColumnType = str.split(SEPARATOR_SPACE);
-            StringBuilder stringBuilder = new StringBuilder("");
+            String columnNameAndType = ColumnNameAndColumnType(tableName);
+            resultList.add(columnNameAndType);
+            String[] columnNameAndColumnType = columnNameAndType.split(SEPARATOR_SPACE);
+            StringBuilder value = new StringBuilder("");
             while (rs.next()) {
-                for (int columnName = 0, columnType = 1; columnName < columnNameAndColumnType.length - 1; columnName += 2, columnType += 2) {
-                    String[] strings = str.split(SEPARATOR_SPACE);
-                    if (strings[columnType].startsWith("VARCHAR")) {
-                        stringBuilder.append(rs.getString(strings[columnName]));
-                        stringBuilder.append(SEPARATOR_SPACE);
+                for (int columnName = 0, columnType = 1; columnName < columnNameAndColumnType.length - 1;
+                         columnName += 2, columnType += 2) {
+                    String[] nameAndType = columnNameAndType.split(SEPARATOR_SPACE);
+                    if (nameAndType[columnType].startsWith("VARCHAR")) {
+                        value.append(rs.getString(nameAndType[columnName]));
+                        value.append(SEPARATOR_SPACE);
                     } else {
-                        stringBuilder.append(rs.getInt(strings[columnName]));
-                        stringBuilder.append(SEPARATOR_SPACE);
+                        value.append(rs.getInt(nameAndType[columnName]));
+                        value.append(SEPARATOR_SPACE);
                     }
                 }
-                stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-                list.add(stringBuilder.toString());
-                stringBuilder.delete(0, stringBuilder.length());
+                value.deleteCharAt(value.length() - 1);
+                resultList.add(value.toString());
+                value.delete(0, value.length());
             }
         }
-        return list;
+        return resultList;
     }
 
     private String ColumnNameAndColumnType(String tableName) throws SQLException {
-        String str = "";
+        String result = "";
         DatabaseMetaData dbm = connection.getMetaData();
         try(ResultSet rs = dbm.getColumns(null, "%", tableName, "%")) {
             while (rs.next()) {
                 String col_name = rs.getString("COLUMN_NAME");
                 String data_type = rs.getString("TYPE_NAME");
-                str = str + col_name + SEPARATOR_SPACE + data_type + SEPARATOR_SPACE;
+                result = result + col_name + SEPARATOR_SPACE + data_type + SEPARATOR_SPACE;
             }
         }
-        return str.substring(0,str.length() - 1);
+        return result.substring(0,result.length() - 1);
     }
 
     @Override
@@ -135,14 +137,16 @@ public class JDBCDataBaseManager implements DataBaseManager {
     public int insert(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException {
         int result = 0;
         try(Statement statement = connection.createStatement();) {
-            String sql = "INSERT INTO " + tableName + "(" + columnsAndValuesSet.getColumnName() + ")" + " VALUES " + "(" + columnsAndValuesSet.getColumnValues() + ")";
+            String sql = "INSERT INTO " + tableName + "(" + columnsAndValuesSet.getColumnName() + ")" + " VALUES "
+                                        + "(" + columnsAndValuesSet.getColumnValues() + ")";
             result = statement.executeUpdate(sql);
         }
         return result;
     }
 
     @Override
-    public int update(String tableName, ColumnsAndValuesSet checkedColumnsAndValuesSet, ColumnsAndValuesSet updatedColumnAndValueSet) throws SQLException {
+    public int update(String tableName, ColumnsAndValuesSet checkedColumnsAndValuesSet,
+                      ColumnsAndValuesSet updatedColumnAndValueSet) throws SQLException {
         String nameAndValueForUpdate = updatedColumnAndValueSet.getColumnNameColumnValue();
         String query = "UPDATE " + tableName +" SET " + nameAndValueForUpdate + " WHERE "
                 + checkedColumnsAndValuesSet.getColumnName() + " = " + checkedColumnsAndValuesSet.getColumnValues();
@@ -157,7 +161,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
     public int delete(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException {
         int result = 0;
         try(Statement statement = connection.createStatement();) {
-            String query = "DELETE FROM " + tableName + " WHERE " + columnsAndValuesSet.getColumnName() + " = " + columnsAndValuesSet.getColumnValues();
+            String query = "DELETE FROM " + tableName + " WHERE " + columnsAndValuesSet.getColumnName() + " = "
+                                          + columnsAndValuesSet.getColumnValues();
             result = statement.executeUpdate(query);
         }
         return result;

@@ -7,7 +7,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class Find implements Command {
-
     private DataBaseManager dataBaseManager;
     private View view;
 
@@ -23,14 +22,12 @@ public class Find implements Command {
 
     @Override
     public void process(String command) {
-        String[] arr = command.split("[|]");
-        String tableName = arr[1];
+        String[] parameters = command.split("[|]");
+        String tableName = parameters[1];
         try {
-            ArrayList<String> list = dataBaseManager.find(tableName);
-            view.printTable(list);
+            view.printTable(dataBaseManager.find(tableName));
         } catch (SQLException e) {
             view.printError(e);
         }
     }
-
 }

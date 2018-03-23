@@ -6,7 +6,6 @@ import ua.kiev.ashtuka.sqlcmd.view.View;
 import java.sql.SQLException;
 
 public class Clear implements Command {
-
     private View view;
     private DataBaseManager dataBaseManager;
 
@@ -21,8 +20,8 @@ public class Clear implements Command {
 
     @Override
     public void process(String command) {
-        String[] arr = command.split("[|]");
-        String tableName = arr[1];
+        String[] parameters = command.split("[|]");
+        String tableName = parameters[1];
         try {
             dataBaseManager.clear(tableName);
             view.write(String.format("From table '%s' all data deleted", tableName));

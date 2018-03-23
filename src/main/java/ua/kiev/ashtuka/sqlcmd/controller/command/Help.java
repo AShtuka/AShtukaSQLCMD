@@ -3,7 +3,6 @@ package ua.kiev.ashtuka.sqlcmd.controller.command;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
 public class Help implements Command {
-
     private View view;
 
     public Help(View view){
@@ -34,7 +33,8 @@ public class Help implements Command {
                    "\t\t\tcolumn1 - name of the first column of the record\n" +
                    "\t\t\tcolumn2 - the name of the second column of the record\n" +
                    "\t\t\tcolumnN is the name of the nth column of the record\n" +
-                   "\t\tDefault type of field is VARCHAR. Record length 20 characters. If you want to change the field type enter the command in the format\n" +
+                   "\t\tDefault type of field is VARCHAR. Record length 20 characters." +
+                      " If you want to change the field type enter the command in the format\n" +
                    "\t\tcreate|tableName|column1Name|column1Type|column2Name|column2Type|....|column_N_Name|column_N_Type\n" +
                    "\t\t\twhere columnType is field type\n" +
                    "\t\tYou can use the following types only\n" +
@@ -52,7 +52,8 @@ public class Help implements Command {
                    "\t\t\tvalue_N is the value of the nth column of the record");
 
         view.write("\tupdate|tableName|column1Name|Value1|column2Name|Value2|......|column_N_Name|Value_N");
-        view.write("\t\tThe command will update the entry, setting the value of 'column2Name = Value2', for which the condition 'column1Name = Value1' is met");
+        view.write("\t\tThe command will update the entry, setting the value of 'column2Name = Value2'," +
+                   " for which the condition 'column1Name = Value1' is met");
         view.write("\t\t\twhere: tableName - table name\n" +
                    "\t\t\tcolumn1Name - the name of the column of the record to be checked\n" +
                    "\t\t\tvalue1Name - value to which the column 'column1Name' for the record to be updated must match\n" +
@@ -78,6 +79,5 @@ public class Help implements Command {
 
         view.write("\texit");
         view.write("\t\tCommand to disconnect from the model and exit the application");
-
     }
 }

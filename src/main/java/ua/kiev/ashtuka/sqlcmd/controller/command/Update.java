@@ -7,7 +7,6 @@ import ua.kiev.ashtuka.sqlcmd.view.View;
 import java.sql.SQLException;
 
 public class Update implements Command {
-
     private DataBaseManager dataBaseManager;
     private View view;
     private ColumnsAndValuesSet checked;
@@ -26,19 +25,20 @@ public class Update implements Command {
 
     @Override
     public void process(String command) {
-        String[] arr = command.split("[|]");
+        String[] parameters = command.split("[|]");
         try {
-            if (arr.length < 6 || arr.length % 2 != 0) {
+            if (parameters.length < 6 || parameters.length % 2 != 0) {
                 throw new WrongCommandFormat(String.format("Invalid command format. Expected " +
-                        "update|tableName|column1Name|Value1|column2Name|Value2|....|column_N_Name|Value_N and you have entered: %s", command));
+                        "update|tableName|column1Name|Value1|column2Name|Value2|...." +
+                        "|column_N_Name|Value_N and you have entered: %s", command));
             }
         } catch (WrongCommandFormat e) {
             view.printError(e);
             return;
         }
-        String tableName = arr[1];
-        checked.put(arr[2],arr[3]);
-        update = getUpdate(arr, command);
+        String tableName = parameters[1];
+        checked.put(parameters[2],parameters[3]);
+        update = getUpdate(parameters);
         if (checked.size() != 0 && update.size() != 0) {
             try {
                 dataBaseManager.update(tableName, checked, update);
@@ -53,10 +53,9 @@ public class Update implements Command {
         }
     }
 
-    private ColumnsAndValuesSet getUpdate(String[] arr, String command) {
-
-            for (int i = 4, y = 5; i <= arr.length - 2; i += 2, y += 2) {
-                update.put(arr[i], arr[y]);
+    private ColumnsAndValuesSet getUpdate(String[] parameters) {
+            for (int name = 4, value = 5; name <= parameters.length - 2; name += 2, value += 2) {
+                update.put(parameters[name], parameters[value]);
             }
         return update;
     }

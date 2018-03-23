@@ -24,9 +24,9 @@ public class Create implements Command {
 
     @Override
     public void process(String command) {
-        String[] arr = command.split("[|]");
+        String[] parameters = command.split("[|]");
         try {
-            if (arr.length <= 2){
+            if (parameters.length <= 2){
                 throw new WrongCommandFormat(String.format("Invalid command format. Expected " +
                     "create|tableName|column1Name|column2Name|....|column_N_Name and you have entered: %s", command));
             }
@@ -34,8 +34,8 @@ public class Create implements Command {
             view.printError(e);
             return;
         }
-        String tableName = arr[1];
-        columnsAndPropertiesSet = getColumnAndColumnTypeSet(arr, command);
+        String tableName = parameters[1];
+        columnsAndPropertiesSet = getColumnAndColumnTypeSet(parameters, command);
         if (columnsAndPropertiesSet.size() != 0) {
             try {
                 dataBaseManager.create(tableName, columnsAndPropertiesSet);
@@ -49,26 +49,27 @@ public class Create implements Command {
         }
     }
 
-    private ColumnsAndPropertiesSet getColumnAndColumnTypeSet(String[] arr,String command) {
+    private ColumnsAndPropertiesSet getColumnAndColumnTypeSet(String[] parameters,String command) {
         try {
-            if (arr[3].equals("VARCHAR") || arr[3].equals("INT")) {
-                if (arr.length % 2 != 0 ){
+            if (parameters[3].equals("VARCHAR") || parameters[3].equals("INT")) {
+                if (parameters.length % 2 != 0 ){
                     throw new WrongCommandFormat(String.format("Invalid command format. Expected " +
-                            "create|tableName|column1Name|column1Type|column2Name|column2Type|....|column_N_Name|column_N_Type and you have entered: %s", command));
+                            "create|tableName|column1Name|column1Type|column2Name|column2Type|...." +
+                            "|column_N_Name|column_N_Type and you have entered: %s", command));
                 }
-                for (int i = 2, y = 3; i <= arr.length - 2; i += 2, y += 2) {
-                    if (arr[y].equals("VARCHAR")) {
-                        columnsAndPropertiesSet.put(arr[i], ColumnType.VARCHAR, 20);
-                    } else if (arr[y].equals("INT")) {
-                        arr[y].equals("INT");
-                        columnsAndPropertiesSet.put(arr[i], ColumnType.INT);
+                for (int name = 2, type = 3; name <= parameters.length - 2; name += 2, type += 2) {
+                    if (parameters[type].equals("VARCHAR")) {
+                        columnsAndPropertiesSet.put(parameters[name], ColumnType.VARCHAR, 20);
+                    } else if (parameters[type].equals("INT")) {
+                        columnsAndPropertiesSet.put(parameters[name], ColumnType.INT);
                     } else {
-                        throw new WrongTypeFormatException(String.format("Invalid type specified. Expected VARCHAR or INT and you have entered: %s",arr[y]));
+                        throw new WrongTypeFormatException(String.format("Invalid type specified." +
+                                " Expected VARCHAR or INT and you have entered: %s",parameters[type]));
                     }
                 }
             } else {
-                for (int i = 2; i < arr.length; i++) {
-                    columnsAndPropertiesSet.put(arr[i], ColumnType.VARCHAR, 20);
+                for (int name = 2; name < parameters.length; name++) {
+                    columnsAndPropertiesSet.put(parameters[name], ColumnType.VARCHAR, 20);
                 }
             }
         } catch (Exception e){

@@ -21,14 +21,14 @@ public class Connect implements Command {
     @Override
     public void process(String command) {
                 try {
-                    String[] data = command.split("[|]");
-                    if (data.length != count()){
+                    String[] parameters = command.split("[|]");
+                    if (parameters.length != parametersNumber()){
                         throw new IllegalArgumentException(String.format("Wrong number of parameters separated by a sign '|' ," +
-                                " expected '%s', but we have '%s'", count(), data.length));
+                                " expected '%s', but we have '%s'", parametersNumber(), parameters.length));
                     }
-                    String dataBaseName = data[1];
-                    String userName = data[2];
-                    String password = data[3];
+                    String dataBaseName = parameters[1];
+                    String userName = parameters[2];
+                    String password = parameters[3];
                     String fullURL = URL + dataBaseName;
                     dataBaseManager.getConnection(fullURL, dataBaseName, userName, password);
                     view.write("Connection successful!");
@@ -37,7 +37,7 @@ public class Connect implements Command {
                 }
     }
 
-    private int count() {
+    private int parametersNumber() {
         return COMMAND_SAMPLE.split("[|]").length;
     }
 }

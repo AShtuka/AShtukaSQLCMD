@@ -1,10 +1,10 @@
 package ua.kiev.ashtuka.sqlcmd.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ColumnsAndPropertiesSet {
-
-    private ArrayList<ColumnProperties> columnsAndPropertiesSets = new ArrayList<>();
+    private List<ColumnProperties> columnsAndPropertiesSets = new ArrayList<>();
 
     static class ColumnProperties{
         private String columnName;
@@ -22,7 +22,6 @@ public class ColumnsAndPropertiesSet {
             this.columnType = columnType;
         }
 
-
         public int getVarcharSize() {
             return VarcharSize;
         }
@@ -38,19 +37,22 @@ public class ColumnsAndPropertiesSet {
     }
 
     public String getColumnNamePlusColumnType(){
-        String str = "";
+        String result = "";
         for (int i = 0; i < columnsAndPropertiesSets.size(); i++){
             if (columnsAndPropertiesSets.get(i).getVarcharSize() == 0){
-                str = str + columnsAndPropertiesSets.get(i).columnName + " " + columnsAndPropertiesSets.get(i).columnType + ", ";
+                result = result + columnsAndPropertiesSets.get(i).columnName + " "
+                                + columnsAndPropertiesSets.get(i).columnType + ", ";
             } else {
-                str = str + columnsAndPropertiesSets.get(i).columnName + " " + columnsAndPropertiesSets.get(i).columnType + "(" + columnsAndPropertiesSets.get(i).VarcharSize + ")" + ", ";
+                result = result + columnsAndPropertiesSets.get(i).columnName + " "
+                                + columnsAndPropertiesSets.get(i).columnType + "("
+                                + columnsAndPropertiesSets.get(i).VarcharSize + ")" + ", ";
             }
         }
-        if (str.equals("")){
+        if (result.equals("")){
             return null;
         }
-        str = str.substring(0, str.length() - 2);
-        return str;
+        result = result.substring(0, result.length() - 2);
+        return result;
     }
 
     public void clear(){

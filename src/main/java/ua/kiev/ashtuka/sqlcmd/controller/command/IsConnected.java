@@ -4,7 +4,6 @@ import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
 public class IsConnected implements Command {
-
     private DataBaseManager dataBaseManager;
     private View view;
 
@@ -19,7 +18,7 @@ public class IsConnected implements Command {
 
     @Override
     public void process(String command) {
-        view.write(String.format(
-                "You can not use the command '%s' till " + "do not connect using the command " + "connect|model|user|password", command));
+        view.write(String.format("You can not use the command '%s' till " +
+                                 "do not connect using the command " + "connect|model|user|password", command));
     }
 }

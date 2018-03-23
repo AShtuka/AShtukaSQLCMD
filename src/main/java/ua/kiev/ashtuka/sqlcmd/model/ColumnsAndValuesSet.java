@@ -1,63 +1,59 @@
 package ua.kiev.ashtuka.sqlcmd.model;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class ColumnsAndValuesSet {
-    private ArrayList<ColumnValue> columnValues = new ArrayList<>();
+    private List<ColumnValue> columnValues = new ArrayList<>();
 
     static class ColumnValue{
         private String columnName;
         private Object value;
 
-
         ColumnValue(String columnName, Object value){
             this.columnName = columnName;
             this.value = value;
         }
-
     }
 
     public void put(String columnName, Object value){
         columnValues.add(new ColumnValue(columnName, value));
     }
 
-
     public String getColumnName(){
-        String str = "";
+        String result = "";
         for (int i = 0; i < columnValues.size(); i++) {
-
-            str = str + columnValues.get(i).columnName + ", ";
+            result = result + columnValues.get(i).columnName + ", ";
         }
         if (columnValues.size() == 0) {
             return null;
         }
-        str = str.substring(0, str.length() - 2);
-        return str;
+        result = result.substring(0, result.length() - 2);
+        return result;
     }
 
     public String getColumnValues(){
-        String str = "";
+        String result = "";
         for (int i = 0; i < columnValues.size(); i++) {
-            str = str + "\"" + columnValues.get(i).value.toString() + "\"" + ", ";
+            result = result + "\"" + columnValues.get(i).value.toString() + "\"" + ", ";
         }
         if (columnValues.size() == 0) {
             return null;
         }
-        str = str.substring(0, str.length() - 2);
-        return str;
+        result = result.substring(0, result.length() - 2);
+        return result;
     }
 
     public String getColumnNameColumnValue(){
-        String str = "";
+        String result = "";
         for (int i = 0; i < columnValues.size(); i++) {
-
-            str = str + columnValues.get(i).columnName + " = " + "\"" + columnValues.get(i).value + "\"" + ", ";
+            result = result + columnValues.get(i).columnName + " = " + "\"" + columnValues.get(i).value + "\"" + ", ";
         }
         if (columnValues.size() == 0) {
             return null;
         }
-        str = str.substring(0, str.length() - 2);
-        return str;
+        result = result.substring(0, result.length() - 2);
+        return result;
     }
 
     public void clear(){

@@ -6,7 +6,6 @@ import ua.kiev.ashtuka.sqlcmd.view.View;
 import java.sql.SQLException;
 
 public class Drop implements Command {
-
     private DataBaseManager dataBaseManager;
     private View view;
 
@@ -21,8 +20,8 @@ public class Drop implements Command {
 
     @Override
     public void process(String command) {
-        String[] arr = command.split("[|]");
-        String tableName = arr[1];
+        String[] parameters = command.split("[|]");
+        String tableName = parameters[1];
         try {
             dataBaseManager.drop(tableName);
             view.write(String.format("Table '%s' deleted", tableName));

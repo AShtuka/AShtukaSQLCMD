@@ -7,11 +7,9 @@ import ua.kiev.ashtuka.sqlcmd.view.View;
 import java.sql.SQLException;
 
 public class Delete implements Command {
-
     private DataBaseManager dataBaseManager;
     private View view;
     private ColumnsAndValuesSet columnsAndValuesSet;
-
 
     public Delete(DataBaseManager dataBaseManager, View view){
         this.dataBaseManager = dataBaseManager;
@@ -25,9 +23,9 @@ public class Delete implements Command {
 
     @Override
     public void process(String command) {
-        String[] arr = command.split("[|]");
-        String tableName = arr[1];
-        columnsAndValuesSet = getColumnAndValueSet(arr, command);
+        String[] parameters = command.split("[|]");
+        String tableName = parameters[1];
+        columnsAndValuesSet = getColumnAndValueSet(parameters, command);
         if (columnsAndValuesSet.size() != 0) {
             try {
                 dataBaseManager.delete(tableName, columnsAndValuesSet);
@@ -40,14 +38,14 @@ public class Delete implements Command {
         }
     }
 
-    private ColumnsAndValuesSet getColumnAndValueSet(String[] arr, String command) {
+    private ColumnsAndValuesSet getColumnAndValueSet(String[] parameters, String command) {
         try {
-            if (arr.length % 2 != 0 || arr.length == 2) {
+            if (parameters.length % 2 != 0 || parameters.length == 2) {
                 throw new WrongCommandFormat(String.format("Invalid command format. Expected " +
                         "delete|tableName|columnName|Value and you have entered: %s", command));
             }
-            for (int i = 2, y = 3; i <= arr.length - 2; i += 2, y += 2) {
-                columnsAndValuesSet.put(arr[i], arr[y]);
+            for (int columnName = 2, value = 3; columnName <= parameters.length - 2; columnName += 2, value += 2) {
+                columnsAndValuesSet.put(parameters[columnName], parameters[value]);
             }
         } catch (WrongCommandFormat e){
             columnsAndValuesSet.clear();
