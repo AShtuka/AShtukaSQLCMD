@@ -4,6 +4,8 @@ import ua.kiev.ashtuka.sqlcmd.controller.command.*;
 import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
+import java.sql.SQLException;
+
 public class MainController {
     private View view;
     private DataBaseManager dataBaseManager;
@@ -15,7 +17,7 @@ public class MainController {
         this.commands = new Command[]{
                 new Connect(dataBaseManager, view),
                 new Help(view),
-                new Exit(view),
+                new Exit(dataBaseManager, view),
                 new IsConnected(dataBaseManager, view),
                 new Tables(dataBaseManager, view),
                 new Find(dataBaseManager, view),
@@ -33,17 +35,19 @@ public class MainController {
             doWork();
         } catch (ExitException e){
             // do nothing
+        } catch (SQLException sqlEx){
+            view.write(sqlEx.getMessage());
         }
         return;
     }
 
-    private void doWork() {
+    private void doWork() throws SQLException {
         view.write("Hi user!");
         view.write("Enter please name of model, user's name and password in format: connect|model|userName|password");
         while (true) {
             String input = view.read();
             if (input == null){ // null if close application but it does not work in my IDEA
-                new Exit(view).process(input);
+                new Exit(dataBaseManager, view).process(input);
             }
             for (Command command : commands){
                 if (command.canProcess(input)) {

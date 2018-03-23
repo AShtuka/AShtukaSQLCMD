@@ -26,10 +26,19 @@ public class Console implements View {
     @Override
     public void printTable(ArrayList<String> list) {
         String str = list.get(0);
+        String[] columnName = str.split(" ");
+        StringBuilder stringBuilder = new StringBuilder("");
+        for (int i = 0; i < columnName.length - 1; i += 2) {
+            stringBuilder.append(columnName[i]);
+            stringBuilder.append(" ");
+        }
+        stringBuilder.deleteCharAt(stringBuilder.length() - 1);
+        list.set(0,stringBuilder.toString());
+        String strForPrint = list.get(0);
         list.remove(0);
-        String[] obgArg = obgArg(str);
-        String format = format(str);
-        String[] horizontalLineObjArg = horizontalLine(str);
+        String[] obgArg = obgArg(strForPrint);
+        String format = format(strForPrint);
+        String[] horizontalLineObjArg = horizontalLine(strForPrint);
         tablePrint(list, obgArg, format, horizontalLineObjArg);
     }
 

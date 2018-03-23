@@ -60,7 +60,7 @@ public class DeleteTest extends OutputTest {
 
         // when
         ArrayList<String> list = new ArrayList<>();
-        list.add("name secondName age");
+        list.add("name VARCHAR secondName VARCHAR age INT");
         list.add("Marina Shtuka 28");
         list.add("Marina Shtuka 28");
         Mockito.doReturn(list).when(dataBaseManager).find("user");

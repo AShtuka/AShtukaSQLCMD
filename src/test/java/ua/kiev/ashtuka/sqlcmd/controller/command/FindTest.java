@@ -61,7 +61,7 @@ public class FindTest extends OutputTest {
 
         // when
         ArrayList<String> list = new ArrayList<>();
-        list.add("name secondName age");
+        list.add("name VARCHAR secondName VARCHAR age INT");
         list.add("Sasha Shtuka 31");
         list.add("Marina Shtuka 28");
         list.add("Sasha Shtuka 31");

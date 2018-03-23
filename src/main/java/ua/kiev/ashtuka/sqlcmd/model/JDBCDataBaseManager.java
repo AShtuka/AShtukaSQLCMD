@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 public class JDBCDataBaseManager implements DataBaseManager {
 
+    public static final String SEPARATOR_SPACE = " ";
     private Connection connection;
 
     public JDBCDataBaseManager() throws SQLException{
@@ -14,8 +15,7 @@ public class JDBCDataBaseManager implements DataBaseManager {
             DriverManager.registerDriver(driver);
     }
     @Override
-    public Connection getConnection(String dataBaseName, String USERNAME, String PASSWORD)  {
-        String URL = "jdbc:mysql://localhost:3306/" + dataBaseName ;
+    public Connection getConnection(String URL, String dataBaseName, String USERNAME, String PASSWORD)  {
         if (connection != null){
             return connection;
         }
@@ -85,27 +85,19 @@ public class JDBCDataBaseManager implements DataBaseManager {
     public ArrayList<String> find(String tableName) throws SQLException {
         ArrayList<String> list = new ArrayList<>();
         try(Statement st = connection.createStatement(); ResultSet rs = st.executeQuery("SELECT * FROM " + tableName)) {
-            ArrayList<String> arrayList = ColumnNameAndColumnType(tableName);
+            String str = ColumnNameAndColumnType(tableName);
+            list.add(str);
+            String[] columnNameAndColumnType = str.split(SEPARATOR_SPACE);
             StringBuilder stringBuilder = new StringBuilder("");
-            for (int i = 0; i < arrayList.size(); i++) {
-                String str = arrayList.get(i);
-                String[] strings = str.split(" ");
-                stringBuilder.append(strings[0]);
-                stringBuilder.append(" ");
-            }
-            stringBuilder.deleteCharAt(stringBuilder.length() - 1);
-            list.add(stringBuilder.toString());
-            stringBuilder.delete(0, stringBuilder.length());
             while (rs.next()) {
-                for (int i = 0; i < arrayList.size(); i++) {
-                    String str = arrayList.get(i);
-                    String[] strings = str.split(" ");
-                    if (strings[1].startsWith("VARCHAR")) {
-                        stringBuilder.append(rs.getString(strings[0]));
-                        stringBuilder.append(" ");
+                for (int columnName = 0, columnType = 1; columnName < columnNameAndColumnType.length - 1; columnName += 2, columnType += 2) {
+                    String[] strings = str.split(SEPARATOR_SPACE);
+                    if (strings[columnType].startsWith("VARCHAR")) {
+                        stringBuilder.append(rs.getString(strings[columnName]));
+                        stringBuilder.append(SEPARATOR_SPACE);
                     } else {
-                        stringBuilder.append(rs.getInt(strings[0]));
-                        stringBuilder.append(" ");
+                        stringBuilder.append(rs.getInt(strings[columnName]));
+                        stringBuilder.append(SEPARATOR_SPACE);
                     }
                 }
                 stringBuilder.deleteCharAt(stringBuilder.length() - 1);
@@ -116,17 +108,17 @@ public class JDBCDataBaseManager implements DataBaseManager {
         return list;
     }
 
-    private ArrayList<String> ColumnNameAndColumnType(String tableName) throws SQLException {
-        ArrayList<String> arrayList = new ArrayList<>();
+    private String ColumnNameAndColumnType(String tableName) throws SQLException {
+        String str = "";
         DatabaseMetaData dbm = connection.getMetaData();
         try(ResultSet rs = dbm.getColumns(null, "%", tableName, "%")) {
             while (rs.next()) {
                 String col_name = rs.getString("COLUMN_NAME");
                 String data_type = rs.getString("TYPE_NAME");
-                arrayList.add(col_name + " " + data_type);
+                str = str + col_name + SEPARATOR_SPACE + data_type + SEPARATOR_SPACE;
             }
         }
-        return arrayList;
+        return str.substring(0,str.length() - 1);
     }
 
     @Override
@@ -174,5 +166,12 @@ public class JDBCDataBaseManager implements DataBaseManager {
     @Override
     public boolean isConnected() {
         return connection != null;
+    }
+
+    @Override
+    public void closeConnection() throws SQLException {
+        if (connection != null){
+            connection.close();
+        }
     }
 }

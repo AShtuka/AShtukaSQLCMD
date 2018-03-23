@@ -56,10 +56,10 @@ public class ConnectTest extends OutputTest{
         Command command = new Connect(dataBaseManager, view);
 
         // when
-        when(dataBaseManager.getConnection("modelName","userName", "password")).thenReturn(null);
+        when(dataBaseManager.getConnection("URL","dataBaseName", "userName", "password")).thenReturn(null);
 
         // than
-        command.process("connect|modelName|userName|password");
+        command.process("connect|dataBaseName|userName|password");
         assertEquals(  "Connection successful!\r\n" , output.toString());
     }
 
@@ -70,10 +70,13 @@ public class ConnectTest extends OutputTest{
         Command command = new Connect(dataBaseManager, view);
 
         // when
-        when(dataBaseManager.getConnection("modelName","userName", "password")).thenThrow(SQLException.class);
+        when(dataBaseManager.getConnection("jdbc:mysql://localhost:3306/dataBaseName",
+                                            "dataBaseName",
+                                            "userName",
+                                            "password")).thenThrow(SQLException.class);
 
         // than
-        command.process("connect|modelName|userName|password");
+        command.process("connect|dataBaseName|userName|password");
         assertEquals(  "Fail for a reason: null\r\n" +
                                 "Please try again!\r\n" , output.toString());
     }

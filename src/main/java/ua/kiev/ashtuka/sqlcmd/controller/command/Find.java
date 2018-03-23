@@ -26,7 +26,8 @@ public class Find implements Command {
         String[] arr = command.split("[|]");
         String tableName = arr[1];
         try {
-            view.printTable(dataBaseManager.find(tableName));
+            ArrayList<String> list = dataBaseManager.find(tableName);
+            view.printTable(list);
         } catch (SQLException e) {
             view.printError(e);
         }

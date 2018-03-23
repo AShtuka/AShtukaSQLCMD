@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 public interface DataBaseManager {
 
-    Connection getConnection(String dataBaseName, String USERNAME, String PASSWORD);
+    Connection getConnection(String URL, String dataBaseName, String USERNAME, String PASSWORD);
 
     ArrayList<String> tables() throws SQLException;
 
@@ -29,4 +29,6 @@ public interface DataBaseManager {
     int delete(String tableName, ColumnsAndValuesSet columnsAndValuesSet) throws SQLException;
 
     boolean isConnected();
+
+    void closeConnection() throws SQLException;
 }

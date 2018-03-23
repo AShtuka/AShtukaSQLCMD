@@ -5,6 +5,8 @@ import org.junit.Test;
 import org.mockito.Mockito;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
+import java.sql.SQLException;
+
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
 import static junit.framework.TestCase.fail;
@@ -28,7 +30,7 @@ public class UnsupportedTest {
 
 
     @Test
-    public void testProcess(){
+    public void testProcess() throws SQLException {
         // given
         Command command = new Unsupported(view);
 
