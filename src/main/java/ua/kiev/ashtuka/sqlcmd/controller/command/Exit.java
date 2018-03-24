@@ -19,8 +19,12 @@ public class Exit implements Command {
     }
 
     @Override
-    public void process(String command) throws SQLException {
-        dataBaseManager.closeConnection();
+    public void process(String command) {
+        try {
+            dataBaseManager.closeConnection();
+        } catch (SQLException e) {
+            view.printError(e);
+        }
         view.write("GoodBye!");
         throw new ExitException();
     }

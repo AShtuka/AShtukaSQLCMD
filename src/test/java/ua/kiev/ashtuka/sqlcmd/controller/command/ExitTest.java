@@ -46,7 +46,7 @@ public class ExitTest extends OutputTest {
         assertFalse(canProcess);
     }
 
-    @Test(expected = SQLException.class)
+    @Test
     public void testProcessCommandExit_throwSQLException() throws SQLException {
         // given
         Command command = new Exit(dataBaseManager, view);
@@ -55,8 +55,15 @@ public class ExitTest extends OutputTest {
         Mockito.doThrow(SQLException.class).when(dataBaseManager).closeConnection();
 
         // than
-        command.process("exit");
-        Mockito.verify(view).write("GoodBye!");
+        try {
+            command.process("exit");
+        } catch (ExitException ex){
+            view.write("Expected ExitException");
+        }
+        assertEquals(  "Fail for a reason: null\r\n" +
+                                "Please try again!\r\n" +
+                                "GoodBye!\r\n" +
+                                "Expected ExitException\r\n", output.toString());
     }
 
     @Test
@@ -65,11 +72,8 @@ public class ExitTest extends OutputTest {
         Command command = new Exit(dataBaseManager, view);
 
         // when
-       // Mockito.doThrow(SQLException.class).when(dataBaseManager).closeConnection();
         try {
             command.process("exit");
-        }catch (SQLException e){
-            // do nothing
         } catch (ExitException ex){
             view.write("Expected ExitException");
         }

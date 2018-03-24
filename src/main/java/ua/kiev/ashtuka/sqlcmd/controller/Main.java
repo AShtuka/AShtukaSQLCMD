@@ -8,9 +8,14 @@ import ua.kiev.ashtuka.sqlcmd.view.View;
 import java.sql.SQLException;
 
 public class Main {
-    public static void main(String[] args) throws SQLException {
+    public static void main(String[] args){
         View view = new Console();
-        DataBaseManager dataBaseManager = new JDBCDataBaseManager();
+        DataBaseManager dataBaseManager = null;
+        try {
+            dataBaseManager = new JDBCDataBaseManager();
+        } catch (SQLException e) {
+            view.printError(e);
+        }
 
         MainController mainController = new MainController(view, dataBaseManager);
         mainController.run();

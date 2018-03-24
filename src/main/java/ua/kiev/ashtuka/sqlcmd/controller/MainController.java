@@ -35,13 +35,11 @@ public class MainController {
             doWork();
         } catch (ExitException e){
             // do nothing
-        } catch (SQLException sqlEx){
-            view.write(sqlEx.getMessage());
         }
         return;
     }
 
-    private void doWork() throws SQLException {
+    private void doWork(){
         view.write("Hi user!");
         view.write("Enter please name of model, user's name and password in format: connect|model|userName|password");
         while (true) {
