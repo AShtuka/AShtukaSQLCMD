@@ -4,8 +4,6 @@ import ua.kiev.ashtuka.sqlcmd.controller.command.*;
 import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
-import java.sql.SQLException;
-
 public class MainController {
     private View view;
     private DataBaseManager dataBaseManager;

@@ -26,8 +26,8 @@ public class Console implements View {
         if (e.getCause() != null){
             message = message + " " + e.getCause().getMessage();
         }
-        System.out.println("Fail for a reason: " + message);
-        System.out.println("Please try again!");
+        write("Fail for a reason: " + message);
+        write("Please try again!");
     }
 
     @Override

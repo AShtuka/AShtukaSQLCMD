@@ -4,7 +4,6 @@ import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 public class Tables implements Command {

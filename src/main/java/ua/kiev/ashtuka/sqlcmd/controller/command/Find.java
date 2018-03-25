@@ -4,7 +4,6 @@ import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public class Find implements Command {
     private DataBaseManager dataBaseManager;
