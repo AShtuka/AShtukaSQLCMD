@@ -6,7 +6,7 @@ import java.util.List;
 public class ColumnsAndPropertiesSet {
     private List<ColumnProperties> columnsAndPropertiesSets = new ArrayList<>();
 
-    static class ColumnProperties{
+    private static class ColumnProperties{
         private String columnName;
         private ColumnType columnType;
         private int VarcharSize;

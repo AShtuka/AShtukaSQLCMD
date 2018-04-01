@@ -9,6 +9,8 @@ import ua.kiev.ashtuka.sqlcmd.view.View;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 import static junit.framework.TestCase.assertFalse;
 import static junit.framework.TestCase.assertTrue;
@@ -70,7 +72,7 @@ public class TablesTest extends OutputTest {
         Command command = new Tables(dataBaseManager, view);
 
         // when
-        ArrayList<String> list = new ArrayList<>();
+        Set<String> list = new LinkedHashSet<>();
         list.add("Table_name = contact");
         list.add("Table_name = contact_hobby_detail");
         list.add("Table_name = contact_tel_detail");

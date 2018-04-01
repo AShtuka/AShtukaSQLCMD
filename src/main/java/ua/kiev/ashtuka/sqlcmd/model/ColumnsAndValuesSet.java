@@ -1,66 +1,56 @@
 package ua.kiev.ashtuka.sqlcmd.model;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class ColumnsAndValuesSet {
-    private List<ColumnValue> columnValues = new ArrayList<>();
-
-    static class ColumnValue{
-        private String columnName;
-        private Object value;
-
-        ColumnValue(String columnName, Object value){
-            this.columnName = columnName;
-            this.value = value;
-        }
-    }
+    private Map<String, Object> columnValue = new LinkedHashMap<>();
 
     public void put(String columnName, Object value){
-        columnValues.add(new ColumnValue(columnName, value));
+        columnValue.put(columnName, value);
     }
 
     public String getColumnName(){
-        String result = "";
-        for (int i = 0; i < columnValues.size(); i++) {
-            result = result + columnValues.get(i).columnName + ", ";
-        }
-        if (columnValues.size() == 0) {
+        if (columnValue.isEmpty()) {
             return null;
+        }
+        String result = "";
+        for (Map.Entry<String, Object> entry : columnValue.entrySet()){
+            result = result + entry.getKey() + ", ";
         }
         result = result.substring(0, result.length() - 2);
         return result;
     }
 
     public String getColumnValues(){
-        String result = "";
-        for (int i = 0; i < columnValues.size(); i++) {
-            result = result + "\"" + columnValues.get(i).value.toString() + "\"" + ", ";
-        }
-        if (columnValues.size() == 0) {
+        if (columnValue.isEmpty()) {
             return null;
+        }
+        String result = "";
+        for (Map.Entry<String, Object> entry : columnValue.entrySet()){
+            result = result + "\"" + entry.getValue() + "\"" + ", ";
         }
         result = result.substring(0, result.length() - 2);
         return result;
     }
 
     public String getColumnNameColumnValue(){
-        String result = "";
-        for (int i = 0; i < columnValues.size(); i++) {
-            result = result + columnValues.get(i).columnName + " = " + "\"" + columnValues.get(i).value + "\"" + ", ";
-        }
-        if (columnValues.size() == 0) {
+        if (columnValue.isEmpty()) {
             return null;
+        }
+        String result = "";
+        for (Map.Entry<String, Object> entry : columnValue.entrySet()) {
+            result = result + entry.getKey() + " = " + "\"" + entry.getValue() + "\"" + ", ";
         }
         result = result.substring(0, result.length() - 2);
         return result;
     }
 
     public void clear(){
-        columnValues.clear();
+        columnValue.clear();
     }
 
     public int size(){
-        return columnValues.size();
+        return columnValue.size();
     }
 }

@@ -3,15 +3,16 @@ package ua.kiev.ashtuka.sqlcmd.model;
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Set;
 
 public interface DataBaseManager {
     Connection getConnection(String URL, String dataBaseName, String USERNAME, String PASSWORD);
 
-    List<String> tables() throws SQLException;
+    Set<String> tables() throws SQLException;
 
-    List<String> databases() throws SQLException;
+    Set<String> databases() throws SQLException;
 
-    List<String> tables(String dataBase_Name) throws SQLException;
+    Set<String> tables(String dataBase_Name) throws SQLException;
 
     void clear(String tableName) throws SQLException;
 

@@ -3,8 +3,7 @@ package ua.kiev.ashtuka.sqlcmd.model;
 import com.mysql.fabric.jdbc.FabricMySQLDriver;
 
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class JDBCDataBaseManager implements DataBaseManager {
     public static final String SEPARATOR_SPACE = " ";
@@ -30,8 +29,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public List<String> tables() throws SQLException {
-        List<String> tablesList = new ArrayList<>();
+    public Set<String> tables() throws SQLException {
+        Set<String> tablesList = new LinkedHashSet<>();
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         try(ResultSet rs = databaseMetaData.getTables(null, null, "%",null)) {
             while (rs.next()) {
@@ -42,8 +41,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public List<String> databases() throws SQLException {
-        List<String> dbList = new ArrayList<>();
+    public Set<String> databases() throws SQLException {
+        Set<String> dbList = new LinkedHashSet<>();
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         try(ResultSet rs = databaseMetaData.getCatalogs()) {
             while (rs.next()) {
@@ -54,8 +53,8 @@ public class JDBCDataBaseManager implements DataBaseManager {
     }
 
     @Override
-    public List<String> tables(String dataBase_Name) throws SQLException {
-        List<String> tablesList = new ArrayList<>();
+    public Set<String> tables(String dataBase_Name) throws SQLException {
+        Set<String> tablesList = new LinkedHashSet<>();
         DatabaseMetaData databaseMetaData = connection.getMetaData();
         String[] types = {"TABLE"};
         try(ResultSet rs = databaseMetaData.getTables(dataBase_Name, null, "%",types)) {

@@ -4,7 +4,7 @@ import ua.kiev.ashtuka.sqlcmd.model.DataBaseManager;
 import ua.kiev.ashtuka.sqlcmd.view.View;
 
 import java.sql.SQLException;
-import java.util.List;
+import java.util.Set;
 
 public class Tables implements Command {
     private View view;
@@ -22,9 +22,9 @@ public class Tables implements Command {
     @Override
     public void process(String command) {
         try {
-            List<String> tablesList = dataBaseManager.tables();
-            for (int i = 0; i < tablesList.size(); i++){
-                view.write(tablesList.get(i));
+            Set<String> tablesList = dataBaseManager.tables();
+            for (String tableName : tablesList){
+                view.write(tableName);
             }
         } catch (SQLException e) {
             view.printError(e);
