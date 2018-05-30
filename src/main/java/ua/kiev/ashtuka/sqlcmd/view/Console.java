@@ -43,8 +43,9 @@ public class Console implements View {
         String columnNameLine = lineWithName.deleteCharAt(lineWithName.length() - 1).toString();
         String[] header = valueForPrint(columnNameLine);
         String format = getFormat(columnNameLine);
+        String formatHorizontalLine = getFormatForHorizontalLine(columnNameLine);
         String[] horizontalLine = getHorizontalLine(columnNameWithType.length / 2);
-        print(tableData, header, format, horizontalLine);
+        print(tableData, header, format, horizontalLine, formatHorizontalLine);
     }
 
     private String getFormat(String columnNameLine) {
@@ -54,6 +55,15 @@ public class Console implements View {
             result = result + "-20s%-2s%";
         }
         return "%-2s%" + result + "n";
+    }
+
+    private String getFormatForHorizontalLine(String columnNameLine) {
+        String[] strings = columnNameLine.split(" ");
+        String result = "";
+        for (int i = 0; i < strings.length; i++){
+            result = result + "-20s%-1s%";
+        }
+        return "%-1s%" + result + "n";
     }
 
     private String[] valueForPrint(String columnNameLine) {
@@ -77,7 +87,7 @@ public class Console implements View {
         result[0] = "+";
         result[result.length - 1] = "+";
         for (int plusPosition = 0, hyphenPosition = 1; plusPosition < nameNumber; plusPosition++, hyphenPosition = hyphenPosition + 2 ){
-            result[hyphenPosition] = "--------------------";
+            result[hyphenPosition] = "---------------------";
         }
         for (int plusPosition = 1; plusPosition < result.length; plusPosition++){
             if (plusPosition % 2 == 0){
@@ -87,16 +97,16 @@ public class Console implements View {
         return result;
     }
 
-    private void print(List<String> tableData, String[] header, String format, String[] horizontalLine) {
-        formatWrite(format, horizontalLine);
+    private void print(List<String> tableData, String[] header, String format, String[] horizontalLine, String formatHorizontalLine) {
+        formatWrite(formatHorizontalLine, horizontalLine);
         formatWrite(format, header);
-        formatWrite(format, horizontalLine);
+        formatWrite(formatHorizontalLine, horizontalLine);
         for (int i = 0; i < tableData.size(); i ++){
             String valueRow = tableData.get(i);
             String[] valueRowForPrint = valueForPrint(valueRow);
             formatWrite(format, valueRowForPrint);
         }
-        formatWrite(format, horizontalLine);
+        formatWrite(formatHorizontalLine, horizontalLine);
     }
 
     private void formatWrite(String format, Object... arg) {
